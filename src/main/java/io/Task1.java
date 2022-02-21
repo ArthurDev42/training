@@ -1,45 +1,36 @@
 package io;
 
-package io;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Task1 {
-    // not completed
-    // class has one issue
     public static void main(String[] args) {
-        String targetDirectory = "src/main/resources/";
-        String targetFile = "src/main/resources/output.txt";
-        File directory = new File(targetDirectory);
-        if(directory.isDirectory()) {
-            try(FileWriter fileWriter = new FileWriter(targetDirectory.concat("/output.txt"))) {
-                directoryResearch(directory);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if(directory.isFile()) {
-            fileResearch(directory);
-        }
+        String targetDirectoryPath = "src/main/resources/";
+        String outputFileName = "output.txt";
+
+        File directory = new File(targetDirectoryPath);
+        directoryResearch(directory, outputFileName);
     }
 
-    public static void directoryResearch(File dir){
-        int con = 0;
+    public static void directoryResearch(File directory,String outputFile){
+        int currentPathDepth = 0;
 
-        try(FileWriter fileWriter = new FileWriter(dir.getPath().concat("/output.txt"))) {
-            fileWriter.write(dir.getName() + "\n");
-            File files[] = dir.listFiles();
-            List<File> dirList = new ArrayList<>();
+        try(FileWriter fileWriter = new FileWriter(directory.getPath().concat("/" + outputFile))) {
+            fileWriter.write(directory.getName() + "\n");
+            File files[] = directory.listFiles();
+            List<File> directoryList = new ArrayList<>();
             List<File> fileList = new ArrayList<>();
             for (File f: files) {
                 if (f.isDirectory()) {
-                    dirList.add(f);
+                    directoryList.add(f);
                 } else if (f.isFile()) {
                     fileList.add(f);
                 }
             }
-            dirRir(dirList, con, fileWriter);
+            writeToFile(directoryList, currentPathDepth, fileWriter);
             for (File file : fileList) {
                 fileWriter.write("|-" + file.getName() + "\n");
             }
@@ -48,20 +39,17 @@ public class Task1 {
         }
     }
 
-    public static void dirRir(List<File> list, int nesting, FileWriter fileWriter) throws IOException {
+    public static void writeToFile(List<File> list, int currentPathDepth, FileWriter fileWriter) throws IOException {
         for (File dirss:list) {
             if(dirss.isDirectory()) {
-                nesting++;
-                fileWriter.write("|" + "  |".repeat(nesting) + "- " + dirss.getName() + "\n");
-                dirRir(new ArrayList<File>(List.of(dirss.listFiles())), nesting, fileWriter);
-                nesting--;
+                currentPathDepth++;
+                fileWriter.write("|" + "  |".repeat(currentPathDepth - 1) + "- " + dirss.getName() + "\n");
+                writeToFile(new ArrayList<File>(List.of(dirss.listFiles())), currentPathDepth, fileWriter);
+                currentPathDepth--;
             } else if (dirss.isFile()) {
-                fileWriter.write("|" + "  |".repeat(nesting) + "---- " + dirss.getName() + "\n");
+                fileWriter.write("|" + "  |".repeat(currentPathDepth) + "-- " + dirss.getName() + "\n");
             }
         }
-    }
-    public static void fileResearch(File file) {
-        System.out.println("This is file.");
     }
 }
 
