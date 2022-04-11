@@ -30,10 +30,11 @@ public class Main {
         university.getFacultyList().add(DataGenerator.generateFaculty(FACULTY_OF_CRIMINAL_LAW, 111, 112));
         university.getFacultyList().add(DataGenerator.generateFaculty(FACULTY_OF_CIVIL_LAW, 115, 116));
         
-        double d = UniversityDriver.counter(university.getFacultyList().get(1).getGroupList().get(0).getStudentsList().get(0));
+        double d1 = UniversityDriver.calculateGpaStudent(university.getFacultyList().get(1).getGroupList().get(0).getStudentsList().get(0));
         
-        System.out.println(d);
+        double d2 = UniversityDriver.calculateGpaGroup(university.getFacultyList().get(1).getGroupList().get(0), AcademicSubject.CRIMINALISTICS);
         
+        double d3 = UniversityDriver.calculateGpaAll(university, AcademicSubject.CRIMINALISTICS);
     }
     
     public static void init() {

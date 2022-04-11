@@ -13,7 +13,7 @@ import java.util.Map;
 public class UniversityDriver {
     
 //  Посчитать средний балл по всем предметам студента
-    public static double counter(Student st) {
+    public static double calculateGpaStudent(Student st) {
         Map<AcademicSubject, Integer> map = st.getAcademicSubjectsMap();
         int summ = 0;
         for (AcademicSubject key: map.keySet()) {
@@ -23,7 +23,7 @@ public class UniversityDriver {
     }
     
     //  Посчитать средний балл по конкретному предмету в конкретной группе и на конкретном факультете
-    public static double counter2(Group group, AcademicSubject academicSubject) {
+    public static double calculateGpaGroup(Group group, AcademicSubject academicSubject) {
         int summ = 0;
         for (Student l: group.getStudentsList()) {
             summ += l.getAcademicSubjectsMap().get(academicSubject);
@@ -32,11 +32,21 @@ public class UniversityDriver {
     }
     
     //  Посчитать средний балл по предмету для всего университета
-    public static double counter3() {
-        
-        
-        
-        return 0;
+    public static double calculateGpaAll(University university, AcademicSubject academicSubject) {
+        university.getFacultyList().get(0).getGroupList().get(0).getStudentsList().get(0).getAcademicSubjectsMap().containsKey(university);
+        int summ = 0;
+        int count = 0;
+        for (Faculty f: university.getFacultyList()) {
+            for (Group g: f.getGroupList()) {
+                for (Student s: g.getStudentsList()) {
+                    if(s.getAcademicSubjectsMap().containsKey(academicSubject)) {
+                        summ += s.getAcademicSubjectsMap().get(academicSubject);
+                        count++;
+                    }
+                }
+            }
+        }
+        return (count != 0) ? summ / count : 0;
     }
     
     
